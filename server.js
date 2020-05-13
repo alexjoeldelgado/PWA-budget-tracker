@@ -7,6 +7,18 @@ const PORT = process.env.PORT || 3000;
 
 const app = express();
 
+const redirectToHTTPS = require('express-http-to-https').redirectToHTTPS
+
+app.use(redirectToHTTPS([/localhost:(\d{4})/], [/\/insecure/], 301));
+
+app.get('/', function (req, res) {
+  res.sendFile(__dirname + "/public/index.html");
+});
+
+app.get('/insecure', function (req, res) {
+  res.send('You are on an insecure connection! Please Try again!');
+});
+
 app.use(logger("dev"));
 
 app.use(compression());
